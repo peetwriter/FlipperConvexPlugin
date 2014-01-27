@@ -14,10 +14,14 @@
 #include <OpenFlipper/BasePlugin/BackupInterface.hh>
 #include <OpenFlipper/BasePlugin/ScriptInterface.hh>
 #include <OpenFlipper/BasePlugin/LoggingInterface.hh>
+#include <OpenFlipper/BasePlugin/LoadSaveInterface.hh>
 
 #include <OpenFlipper/common/Types.hh>
 #include <ObjectTypes/PolyMesh/PolyMesh.hh>
 #include <ObjectTypes/TriangleMesh/TriangleMesh.hh>
+#include <ObjectTypes/Plane/Plane.hh>
+#include <ObjectTypes/Plane/PlaneNode.hh>
+
 
 #include <OpenMesh/Tools/Smoother/JacobiLaplaceSmootherT.hh>
 
@@ -29,7 +33,7 @@
 
 /** Plugin for Smoother Support
  */
-class ConvexPlugin : public QObject, BaseInterface, ToolboxInterface, LoggingInterface, BackupInterface, ScriptInterface
+class ConvexPlugin : public QObject, BaseInterface, ToolboxInterface, LoggingInterface, BackupInterface, ScriptInterface, LoadSaveInterface
 {
   Q_OBJECT
   Q_INTERFACES(BaseInterface)
@@ -37,6 +41,7 @@ class ConvexPlugin : public QObject, BaseInterface, ToolboxInterface, LoggingInt
   Q_INTERFACES(BackupInterface)
   Q_INTERFACES(LoggingInterface)
   Q_INTERFACES(ScriptInterface)
+  Q_INTERFACES(LoadSaveInterface)
 
 signals:
 
@@ -60,6 +65,9 @@ signals:
 
   // ScriptInterface
   void scriptInfo(QString _functionName);
+
+  // LoadSaveInterface
+ void addEmptyObject( DataType _type, int& _id);
   
 public :
 
@@ -105,6 +113,7 @@ public slots:
    QString version() { return QString("0.0"); };
 
    void slot_smooth(int _iterations);
+   void create_object();
 
 
 

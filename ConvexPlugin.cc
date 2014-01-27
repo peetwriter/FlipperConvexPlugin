@@ -9,6 +9,7 @@
 #include <QStringList>
 #include <ACG/Scenegraph/ManipulatorNode.hh>
 
+
 #include <OpenFlipper/BasePlugin/PluginFunctions.hh>
 
 
@@ -35,6 +36,7 @@ initializePlugin()
 
     // connect signals->slots
     connect(tool_->pB_smooth,SIGNAL(clicked() ),this,SLOT(slot_smooth()));
+    //connect(tool_->pb_create,SIGNAL(clicked() ),this,SLOT(create_object()));
 
     toolIcon_ = new QIcon(OpenFlipper::Options::iconDirStr()+OpenFlipper::Options::dirSeparator()+"smoother2.png");
     emit addToolbox( tr("Convex") , tool_, toolIcon_ );
@@ -68,69 +70,46 @@ slot_smooth(int _iterations)
 {
     for ( PluginFunctions::ObjectIterator o_it(PluginFunctions::TARGET_OBJECTS) ; o_it != PluginFunctions::objectsEnd(); ++o_it) {
 
-    bool selectionExists = false;
+        if ( o_it->dataType( DATA_TRIANGLE_MESH ) ) {
 
-    if ( o_it->dataType( DATA_TRIANGLE_MESH ) ) {
+          emit log(LOGERR, "DataType is DATA_POLY_MESH");
 
-        // Get the mesh to work on
-      TriMesh* mesh = PluginFunctions::triMesh(*o_it);
+        } else if ( o_it->dataType( DATA_POLY_MESH ) ) {
 
-      for ( int i = 0 ; i < _iterations ; ++i ) {
-          PolyMesh::VertexIter v_it, v_end=mesh->vertices_end();
-          // Do one smoothing step (For each point of the mesh ... )
-          for (v_it=mesh->vertices_begin(); v_it!=v_end; ++v_it) {
+          emit log(LOGERR, "DataType is DATA_POLY_MESH");
 
-            TriMesh::Point point = TriMesh::Point(0.0 + i,0.0 + i,0.0 + i);
-            mesh->point(v_it) = point;
+        } else {
 
-          }
+          emit log(LOGERR, "DataType not supported.");
+        }
 
-      }// Iterations end
-
-      // Remove the property
-
-      mesh->update_normals();
-
-      emit updatedObject( o_it->id(), UPDATE_GEOMETRY );
-
-      // Create backup
-      emit createBackup(o_it->id(), "Simple Smoothing", UPDATE_GEOMETRY );
-
-   } else if ( o_it->dataType( DATA_POLY_MESH ) ) {
-
-       // Get the mesh to work on
-      PolyMesh* mesh = PluginFunctions::polyMesh(*o_it);
-
-
-      for ( int i = 0 ; i < _iterations ; ++i ) {
-
-
-         PolyMesh::VertexIter v_it, v_end=mesh->vertices_end();
-
-         PolyMesh::Point point = PolyMesh::Point(0.0+ i,0.0 + i,0.0 + i);
-          mesh->point(v_it) = point;
-
-
-      }// Iterations end
-
-      mesh->update_normals();
-
-      emit updatedObject( o_it->id() , UPDATE_GEOMETRY);
-
-      // Create backup
-      emit createBackup(o_it->id(), "Simple Smoothing", UPDATE_GEOMETRY);
-
-    } else {
-
-      emit log(LOGERR, "DataType not supported.");
     }
-  }
-
   // Show script logging
   emit scriptInfo("simpleLaplace(" + QString::number(_iterations) + ")");
 
   emit updateView();
 }
+
+void ConvexPlugin::create_object()
+{
+    int newObjectId = -1;
+    emit addEmptyObject(DATA_PLANE, newObjectId);
+
+    PlaneObject* object = 0;
+    PluginFunctions::getObject(newObjectId, object);
+
+    if (object){
+
+        // Now you can use the object as usual, e.g. Get the node
+        PlaneNode* planeNode = object->planeNode();
+        // change it
+        planeNode->setPosition(origin,normal);
+        planeNode->setSize(kinectinfo_->getMaxDepth() / 2, kinectinfo_->getMaxDepth() / 2);
+    } else {
+        emit log(LOGERR, "something went wrong when creating an object  ");
+    }
+}
+
 //-----------------------------------------------------------------------------
 
 Q_EXPORT_PLUGIN2( ConvexPlugin , ConvexPlugin );
