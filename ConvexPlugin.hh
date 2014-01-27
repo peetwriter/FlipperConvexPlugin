@@ -102,7 +102,9 @@ private slots:
 //===========================================================================
 
 public slots:
-   QString version() { return QString("1.0"); };
+   QString version() { return QString("0.0"); };
+
+   void slot_smooth(int _iterations);
 
 
 

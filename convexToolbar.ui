@@ -35,6 +35,13 @@
           </property>
          </widget>
         </item>
+        <item row="0" column="0">
+         <widget class="QSpinBox" name="iterationSpinBox">
+          <property name="value">
+           <number>5</number>
+          </property>
+         </widget>
+        </item>
        </layout>
       </item>
      </layout>
