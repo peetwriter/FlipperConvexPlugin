@@ -36,7 +36,7 @@ initializePlugin()
 
     // connect signals->slots
     connect(tool_->pB_smooth,SIGNAL(clicked() ),this,SLOT(slot_smooth()));
-    //connect(tool_->pb_create,SIGNAL(clicked() ),this,SLOT(create_object()));
+    connect(tool_->pb_Create,SIGNAL(clicked() ),this,SLOT(create_object()));
 
     toolIcon_ = new QIcon(OpenFlipper::Options::iconDirStr()+OpenFlipper::Options::dirSeparator()+"smoother2.png");
     emit addToolbox( tr("Convex") , tool_, toolIcon_ );
@@ -103,8 +103,8 @@ void ConvexPlugin::create_object()
         // Now you can use the object as usual, e.g. Get the node
         PlaneNode* planeNode = object->planeNode();
         // change it
-        planeNode->setPosition(origin,normal);
-        planeNode->setSize(kinectinfo_->getMaxDepth() / 2, kinectinfo_->getMaxDepth() / 2);
+        //planeNode->setPosition(origin,normal);
+        //planeNode->setSize(kinectinfo_->getMaxDepth() / 2, kinectinfo_->getMaxDepth() / 2);
     } else {
         emit log(LOGERR, "something went wrong when creating an object  ");
     }
