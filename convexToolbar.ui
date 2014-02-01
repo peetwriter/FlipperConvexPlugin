@@ -17,7 +17,7 @@
    <item>
     <widget class="QGroupBox" name="groupBox_2">
      <property name="title">
-      <string>Smoothing</string>
+      <string>Convex</string>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_6">
       <item>

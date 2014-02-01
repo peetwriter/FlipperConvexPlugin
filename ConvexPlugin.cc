@@ -35,7 +35,7 @@ initializePlugin()
     tool_->resize(size);
 
     // connect signals->slots
-    connect(tool_->pB_smooth,SIGNAL(clicked() ),this,SLOT(slot_smooth()));
+    connect(tool_->pB_smooth,SIGNAL(clicked() ),this,SLOT(logger_func()));
     connect(tool_->pb_Create,SIGNAL(clicked() ),this,SLOT(create_object()));
 
     toolIcon_ = new QIcon(OpenFlipper::Options::iconDirStr()+OpenFlipper::Options::dirSeparator()+"smoother2.png");
@@ -52,22 +52,8 @@ void
 ConvexPlugin::pluginsInitialized(){}
 
 
-void ConvexPlugin::slot_smooth() {
+void ConvexPlugin::logger_func() {
 
-    int iterations = 1;
-
-    if(!OpenFlipper::Options::nogui()) {
-        iterations = tool_->iterationSpinBox->value();
-    }
-
-    slot_smooth(iterations);
-}
-
-
-void
-ConvexPlugin::
-slot_smooth(int _iterations)
-{
     for ( PluginFunctions::ObjectIterator o_it(PluginFunctions::TARGET_OBJECTS) ; o_it != PluginFunctions::objectsEnd(); ++o_it) {
 
         if ( o_it->dataType( DATA_TRIANGLE_MESH ) ) {
@@ -84,11 +70,10 @@ slot_smooth(int _iterations)
         }
 
     }
-  // Show script logging
-  emit scriptInfo("simpleLaplace(" + QString::number(_iterations) + ")");
 
   emit updateView();
 }
+
 
 void ConvexPlugin::create_object()
 {

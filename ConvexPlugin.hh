@@ -1,5 +1,3 @@
-
-
 #ifndef CONVEXPLUGIN_HH
 #define CONVEXPLUGIN_HH
 
@@ -22,8 +20,6 @@
 #include <ObjectTypes/Plane/Plane.hh>
 #include <ObjectTypes/Plane/PlaneNode.hh>
 
-
-#include <OpenMesh/Tools/Smoother/JacobiLaplaceSmootherT.hh>
 
 #include "ConvexToolbarWidget.hh"
 
@@ -59,9 +55,6 @@ signals:
   
   // ToolboxInterface
   void addToolbox( QString _name  , QWidget* _widget, QIcon* _icon );
-  
-  // BackupInterface
-  void createBackup( int _id , QString _name, UpdateType _type = UPDATE_ALL );
 
   // ScriptInterface
   void scriptInfo(QString _functionName);
@@ -102,7 +95,7 @@ private :
 private slots:
 
   /// Slot connected to the smooth button in the toolbox
-  void slot_smooth();
+  void logger_func();
 
 //===========================================================================
 /** @name Scripting Functions
@@ -111,14 +104,8 @@ private slots:
 
 public slots:
    QString version() { return QString("0.0"); };
-
-   void slot_smooth(int _iterations);
    void create_object();
 
-
-
-private:
-   typedef OpenMesh::Smoother::JacobiLaplaceSmootherT< TriMesh > SmootherType;
 };
 
 #endif
