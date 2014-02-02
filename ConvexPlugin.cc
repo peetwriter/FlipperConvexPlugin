@@ -55,6 +55,7 @@ ConvexPlugin::pluginsInitialized(){}
 void ConvexPlugin::logger_func() {
 
     int n = 0;
+    std::stringstream sstm;
 
     for ( PluginFunctions::ObjectIterator o_it(PluginFunctions::TARGET_OBJECTS) ; o_it != PluginFunctions::objectsEnd(); ++o_it) {
 
@@ -72,11 +73,15 @@ void ConvexPlugin::logger_func() {
 
           PolyMesh* mesh = PluginFunctions::polyMesh(*o_it);
           PolyMesh::VertexIter v_it, v_end = mesh->vertices_end();
+          PolyMesh::Point point;
+
+
           for (v_it = mesh->vertices_begin(); v_it != v_end; ++v_it) {
-              n++;
+              point = mesh->point(v_it);
+              n = point[1];
+
           }
 
-          std::stringstream sstm;
           sstm << "DataType is PolyMesh, number of vertices:" << n;
           QString result = QString::fromStdString(sstm.str());
 
