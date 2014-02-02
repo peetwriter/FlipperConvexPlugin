@@ -54,15 +54,33 @@ ConvexPlugin::pluginsInitialized(){}
 
 void ConvexPlugin::logger_func() {
 
+    int n = 0;
+
     for ( PluginFunctions::ObjectIterator o_it(PluginFunctions::TARGET_OBJECTS) ; o_it != PluginFunctions::objectsEnd(); ++o_it) {
 
         if ( o_it->dataType( DATA_TRIANGLE_MESH ) ) {
 
-          emit log(LOGERR, "DataType is DATA_POLY_MESH");
+         TriMesh* mesh = PluginFunctions::triMesh(*o_it);
+         TriMesh::VertexIter v_it, v_end = mesh->vertices_end();
+         for (v_it = mesh->vertices_begin(); v_it != v_end; ++v_it) {
+             n++;
+         }
+
+          emit log(LOGERR, "DataType is Triangle mesh, number of vertices:" + n);
 
         } else if ( o_it->dataType( DATA_POLY_MESH ) ) {
 
-          emit log(LOGERR, "DataType is DATA_POLY_MESH");
+          PolyMesh* mesh = PluginFunctions::polyMesh(*o_it);
+          PolyMesh::VertexIter v_it, v_end = mesh->vertices_end();
+          for (v_it = mesh->vertices_begin(); v_it != v_end; ++v_it) {
+              n++;
+          }
+
+          std::stringstream sstm;
+          sstm << "DataType is PolyMesh, number of vertices:" << n;
+          QString result = QString::fromStdString(sstm.str());
+
+          emit log(LOGERR, result);
 
         } else {
 
