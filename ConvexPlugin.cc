@@ -13,8 +13,6 @@
 #include <OpenFlipper/BasePlugin/PluginFunctions.hh>
 
 
-#define SMOOTHER "SmootherData"
-
 //== IMPLEMENTATION ==========================================================
 
 ConvexPlugin::ConvexPlugin() :
@@ -39,7 +37,7 @@ initializePlugin()
     connect(tool_->pb_Create,SIGNAL(clicked() ),this,SLOT(create_object()));
 
     toolIcon_ = new QIcon(OpenFlipper::Options::iconDirStr()+OpenFlipper::Options::dirSeparator()+"smoother2.png");
-    emit addToolbox( tr("Convex") , tool_, toolIcon_ );
+    emit addToolbox( tr("ConvexHull") , tool_, toolIcon_ );
   }
 }
 
