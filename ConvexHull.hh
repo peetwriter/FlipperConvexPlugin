@@ -10,7 +10,7 @@ typedef long long coord2_t;
 struct Point2d {
     coord_t x, y;
 
-    bool operator <(const Point &p) const {
+    bool operator <(const Point2d &p) const {
         return x < p.x || (x == p.x && y < p.y);
     }
 };

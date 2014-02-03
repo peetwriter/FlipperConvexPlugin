@@ -20,7 +20,7 @@
 #include <ObjectTypes/Plane/Plane.hh>
 #include <ObjectTypes/Plane/PlaneNode.hh>
 
-
+#include "ConvexHull.hh"
 #include "ConvexToolbarWidget.hh"
 
 

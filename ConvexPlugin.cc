@@ -52,8 +52,11 @@ ConvexPlugin::pluginsInitialized(){}
 
 void ConvexPlugin::logger_func() {
 
-    int n = 0;
+    int iter, n = 0;
     std::stringstream sstm;
+    std::vector<Point2d> pointMass, convexHull;
+    Point2d point2d;
+
 
     for ( PluginFunctions::ObjectIterator o_it(PluginFunctions::TARGET_OBJECTS) ; o_it != PluginFunctions::objectsEnd(); ++o_it) {
 
@@ -67,21 +70,31 @@ void ConvexPlugin::logger_func() {
 
           emit log(LOGERR, "DataType is Triangle mesh, number of vertices:" + n);
 
-        } else if ( o_it->dataType( DATA_POLY_MESH ) ) {
+        }
+
+        else if ( o_it->dataType( DATA_POLY_MESH ) ) {
 
           PolyMesh* mesh = PluginFunctions::polyMesh(*o_it);
           PolyMesh::VertexIter v_it, v_end = mesh->vertices_end();
           PolyMesh::Point point;
 
-
+          iter = 0;
           for (v_it = mesh->vertices_begin(); v_it != v_end; ++v_it) {
               point = mesh->point(v_it);
-              n = point[1];
-
+              point2d.x = point[0];
+              point2d.y = point[1];
+              pointMass.push_back(point2d);
+              iter++;
           }
 
-          sstm << "DataType is PolyMesh, number of vertices:" << n;
+          convexHull = convex_hull(pointMass);
+          for(int it = 0; it< convexHull.size(); ++it) {
+              point2d = convexHull[it];
+              sstm << "x: " << point2d.x << "y:" << point2d.y;
+          }
           QString result = QString::fromStdString(sstm.str());
+
+          //emit updatedObject( o_it->id(), UPDATE_GEOMETRY );
 
           emit log(LOGERR, result);
 
